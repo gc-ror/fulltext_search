@@ -22,7 +22,34 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### migration file example
+```ruby
+class CreateArticles
+    def change
+        create_table :articles do |t|
+            t.string :title
+            t.text :body
+            t.text :text_for_index
+            
+            t.index :text_for_index, type: :fulltext
+        end
+    end
+end
+```
+### Create model
+```ruby
+class Article < ApplicationRecord
+    scope :match, lambda { |text|
+        jt = Gcl::FulltextSearch::JapaneseTokenizer.new
+        where(arel_table[:text_for_index].match_against(jt.tokenize(text)))
+    }
+    
+    before_save do
+        jt = Gcl::FulltextSearch::JapaneseTokeinzer.new
+        self.text_for_index = jt.tokenize(title, body)
+    end
+end
+```
 
 ## Development
 
