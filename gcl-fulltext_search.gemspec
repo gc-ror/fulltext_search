@@ -38,6 +38,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = %w[lib]
 
   spec.add_dependency 'activerecord', '~> 5.0'
+  spec.add_dependency 'mecab'
+  spec.add_dependency 'natto'
+  spec.add_dependency 'nokogiri'
 
   spec.add_development_dependency 'bundler', '~> 1.17'
   spec.add_development_dependency 'rake', '~> 10.0'
