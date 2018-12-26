@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gcl-fulltext_search (0.1.0.1)
+    gcl-fulltext_search (0.1.0.2)
       activerecord (~> 5.0)
 
 GEM
