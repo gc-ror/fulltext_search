@@ -12,11 +12,12 @@ module FulltextSearch
     include Arel::AliasPredication
     include Arel::Math
 
-    attr_reader :column, :expr
+    attr_reader :column, :expr, :boolean
 
-    def initialize(column, expr)
+    def initialize(column, expr, boolean: false)
       @column = column
       @expr = expr
+      @boolean = boolean
     end
   end
 end

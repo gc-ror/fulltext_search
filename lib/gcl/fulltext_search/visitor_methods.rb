@@ -7,8 +7,18 @@ module FulltextSearch
       collector << 'MATCH ('
       visit o.column, collector
       collector << ') AGAINST ('
-      visit o.expr, collector
-      collector << ')'
+
+      quoted = case o.expr
+             when String
+               Arel::Nodes.build_quoted o.expr
+             when Array
+               Arel::Nodes.build_quoted o.expr.map(&:to_s).compact.join(' ')
+             else
+               o.expr
+             end
+      visit quoted, collector
+
+      collector << (o.boolean ? ' IN BOOLEAN MODE)' : ')')
     end
   end
 

@@ -5,8 +5,8 @@ module FulltextSearch
   # Add match_against expression feature to attribute
   #
   module MatchAgainstExpressions
-    def match_against(expr)
-      MatchAgainst.new self, expr
+    def match_against(expr, boolean: false)
+      MatchAgainst.new self, expr, boolean: boolean
     end
   end
 
