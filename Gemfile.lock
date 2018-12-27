@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gcl-fulltext_search (0.1.0.4)
+    gcl-fulltext_search (0.1.0.5)
       activerecord (~> 5.0)
       mecab
       natto
