@@ -1,26 +1,35 @@
 # Gcl::FulltextSearch
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/gcl/fulltext_search`. To experiment with that code, run `bin/console` for an interactive prompt.
+Add fulltext search feature to your rails application.
 
 ## Installation
+
+Prepare MeCab groonga version:
+
+    $ sudo rpm -ivh http://packages.groonga.org/centos/groonga-release-1.1.0-1.noarch.rpm
+    $ sudo yum install mecab mecab-devel mecab-ipadic
+    
+This is for CentOS 7.
+If you use anther architecture modify this appropriately.
+
+Then execute following line to confirm installation:
+
+    $ echo "今日は天気です" | mecab
+
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'gcl-fulltext_search'
+gem 'gcl-fulltext_search', github: 'gc-ror/gcl-fulltext_search.git'
 ```
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
-
-    $ gem install gcl-fulltext_search
-
 ## Usage
 
-### migration file example
+### Migration file example
 ```ruby
 class CreateArticles
     def change
@@ -29,23 +38,35 @@ class CreateArticles
             t.text :body
             t.text :text_for_index
             
+            # add fulltext index
             t.index :text_for_index, type: :fulltext
         end
     end
 end
 ```
-### Create model
+### Write model
 ```ruby
 class Article < ApplicationRecord
-    scope :match, lambda { |text|
-        jt = Gcl::FulltextSearch::JapaneseTokenizer.new
-        where(arel_table[:text_for_index].match_against(jt.tokenize(text)))
-    }
-    
-    before_save do
-        jt = Gcl::FulltextSearch::JapaneseTokeinzer.new
-        self.text_for_index = jt.tokenize(title, body)
-    end
+  # Scope of fulltext matching
+  scope :match, lambda { |text|
+    jt = Gcl::FulltextSearch::JapaneseTokenizer.new
+    where(arel_table[:text_for_index].match_against(jt.tokenize(text)))
+  }
+
+  # Automatically update text_for_index with tokenized string.
+  before_save do
+    jt = Gcl::FulltextSearch::JapaneseTokenizer.new
+    self.text_for_index = jt.tokenize(title, body)
+  end
+end
+```
+
+### Write Controller
+```ruby
+class ArticlesController < ApplicationController
+  def index
+    @articles = Article.match(params[:keyword])
+  end
 end
 ```
 

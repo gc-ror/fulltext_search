@@ -36,7 +36,7 @@ module Gcl
       #
       def tokenize(*texts)
         [].tap do |results|
-          texts.each do |text|
+          texts.compact.each do |text|
             @mecab.parse(text) do |token|
               feature = token.feature.split(/,/)
               if target_word_classes.include?(feature[0]) && !skip_word_classes.include?(feature[1])
