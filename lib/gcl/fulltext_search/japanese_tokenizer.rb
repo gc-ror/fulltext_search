@@ -10,7 +10,7 @@ module Gcl
       attr_reader :target_word_classes, :skip_word_classes, :skip_words
 
       TARGET_WORD_CLASSES = %w[名詞 動詞 形容詞 形容動詞 副詞].freeze
-      SKIP_WORD_CLASSES = %w[非自立 接尾 代名詞].freeze
+      SKIP_WORD_CLASSES = %w[非自立 接尾].freeze
       SKIP_WORDS = %w[* する おる なる ある より よい].freeze
 
       def initialize(target_word_classes: TARGET_WORD_CLASSES,
